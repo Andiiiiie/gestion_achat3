@@ -1,7 +1,7 @@
-package com.example.gestion_achat2.config;
+package com.example.gestion_achat3.config;
 
-import com.example.gestion_achat2.entity.global.User;
-import com.example.gestion_achat2.repository.UserRepository;
+import com.example.gestion_achat3.entity.global.User;
+import com.example.gestion_achat3.repository.UserRepository;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.userdetails.UserDetails;

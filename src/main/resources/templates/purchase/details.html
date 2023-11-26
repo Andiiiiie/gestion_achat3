@@ -1,10 +1,71 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
+
+<head th:replace="~{fragments/head :: head(title='Details achat')}"></head>
+
+<body class="layout-boxed">
+
+<div class="page">
+    <header th:replace="~{fragments/navbar}"></header>
+    <header th:replace="~{fragments/menu}"></header>
+
+    <div class="page-wrapper">
+        <!-- Page header -->
+        <div th:replace="~{fragments/page_header :: pageHeader(pageTitle='details achat')}"></div>
+
+        <!-- Page body -->
+        <div class="page-body">
+            <div class="container-xl">
+                <!-- Content here -->
+
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+
+                            <div class="card-body">
+                                <table id="table1" class="table table-bordered table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Service</th>
+                                        <th>Produit</th>
+                                        <th>Quantite</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="request: ${purchase.getRequestList()}">
+                                        <td th:text="${request.getRequestdate()}"></td>
+                                        <td th:text="${request.getUser_requester().getService().getName()}"></td>
+                                        <td th:text="${request.getProduct().getDesignation()}"></td>
+                                        <td th:text="${request.getQuantity()}"></td>
+                                    </tr>
+                                    </tbody>
+                                    <tfoot>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Service</th>
+                                        <th>Produit</th>
+                                        <th>Quantite</th>
+                                    </tr>
+                                    <h2>Total: <span th:text="${purchase.getPurchase().getQuantity()}"></span></h2>
+                                    </tfoot>
+                                </table>
+                                <a th:href="@{/purchase/validate/{id} (id=${purchase.getPurchase().getProduct().getId()})}" class="btn btn-warning">
+                                    VALIDER
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Page footer -->
+        <footer th:replace="~{fragments/footer}"></footer>
+    </div>
+</div>
+
+<script th:replace="~{fragments/script}"></script>
 </body>
+
 </html>

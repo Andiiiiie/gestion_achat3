@@ -1,7 +1,7 @@
-package com.example.gestion_achat2.config;
+package com.example.gestion_achat3.config;
 
-import com.example.gestion_achat2.entity.global.Service;
-import com.example.gestion_achat2.entity.global.User;
+import com.example.gestion_achat3.entity.global.Service;
+import com.example.gestion_achat3.entity.global.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

@@ -24,33 +24,21 @@
                       <i class="icon fa-solid fa-user-doctor"></i>
                     </span>
                     <span class="nav-link-title">
-                      Achat
+                      Services
                     </span>
                 </a>
 
                 <div class="dropdown-menu">
                     <div class="dropdown-menu-columns">
                         <div class="dropdown-menu-column">
-                            <a class="dropdown-item" th:href="@{/price/create}" sec:authorize="hasRole('ROLE_ACHAT')" >
-                                Prix fournisseurs
-                            </a>
-                            <a class="dropdown-item" th:href="@{/request/ask/''}" >
+                            <a class="dropdown-item" th:href="@{/request/ask}" >
                                 Demande
                             </a>
-                            <a class="dropdown-item" th:href="@{/request/list}" sec:authorize="hasRole('ROLE_ACHAT')" >
-                                liste des demandes en attente
+                            <a class="dropdown-item" th:href="@{/request/list_chef}" sec:authorize="hasRole('ROLE_CHEF')" >
+                                Demande a valider
                             </a>
-                            <a class="dropdown-item" th:href="@{/purchase/list}" sec:authorize="hasRole('ROLE_ACHAT')" >
-                                liste des achats en attente
-                            </a>
-                            <a class="dropdown-item" th:href="@{/order/list}" sec:authorize="hasRole('ROLE_ACHAT')" >
-                                liste des bons de commandes
-                            </a>
-                            <a class="dropdown-item" th:href="@{/order/finance/list}" sec:authorize="hasRole('ROLE_FINANCE')" >
-                                liste des bons de commandes
-                            </a>
-                            <a class="dropdown-item" th:href="@{/order/DG/list}" sec:authorize="hasRole('ROLE_DG')" >
-                                liste des bons de commandes
+                            <a class="dropdown-item" th:href="@{/order/list}" sec:authorize="hasRole('ROLE_CHEF') or hasRole('ROLE_ACHAT') or hasRole('ROLE_FINANCE') or hasRole('ROLE_DAF') or hasRole('ROLE_DG')" >
+                                Bon de commandes en attente
                             </a>
                         </div>
                     </div>
@@ -70,12 +58,19 @@
                 <div class="dropdown-menu">
                     <div class="dropdown-menu-columns">
                         <div class="dropdown-menu-column">
-                            <a class="dropdown-item" th:href="@{/product/create}" sec:authorize="hasRole('ROLE_ACHAT')" >
-                                Produits
+                            <a class="dropdown-item" th:href="@{/request/list_achat}" sec:authorize="hasRole('ROLE_ACHAT')" >
+                                Demandes en attente
                             </a>
-                            <a class="dropdown-item" th:href="@{/product/create}" sec:authorize="hasRole('ROLE_ACHAT')" >
+                            <a class="dropdown-item" th:href="@{/purchase/list}" sec:authorize="hasRole('ROLE_ACHAT')" >
+                                Achats en attente
+                            </a>
+                            <a class="dropdown-item" th:href="@{/purchase/list_valid}" sec:authorize="hasRole('ROLE_ACHAT')" >
+                                Achats valide pour commande
+                            </a>
+                            <a class="dropdown-item" th:href="@{/supplier/list}" sec:authorize="hasRole('ROLE_ACHAT')" >
                                 Fournisseurs
                             </a>
+
                         </div>
                     </div>
                 </div>

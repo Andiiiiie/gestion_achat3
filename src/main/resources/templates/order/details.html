@@ -1,10 +1,70 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
+
+<head th:replace="~{fragments/head :: head(title='Liste des bon de commandes a valider')}"></head>
+
+<body class="layout-boxed">
+
+<div class="page">
+    <header th:replace="~{fragments/navbar}"></header>
+    <header th:replace="~{fragments/menu}"></header>
+
+    <div class="page-wrapper">
+        <!-- Page header -->
+        <div th:replace="~{fragments/page_header :: pageHeader(pageTitle='Liste des bon de commandes a valider')}"></div>
+
+        <!-- Page body -->
+        <div class="page-body">
+            <div class="container-xl">
+                <!-- Content here -->
+
+                <div class="row">
+                    <h1>BON DE COMMANDE</h1>
+                    <ul>
+                        <li>Fournisseur: <span th:text="${order.getSupplier().getName()}"></span></li>
+                        <li>Total TTC <span th:text="${order.getPrix_ttc()}"></span></li>
+                    </ul>
+                    <div class="col-12">
+                        <div class="card">
+
+                            <div class="card-body">
+                                <table id="table" class="table table-bordered table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th>Produit</th>
+                                        <th>Prix</th>
+                                        <th>Quantite</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="orderDetails: ${orderDetailsList}">
+                                        <td th:text="${orderDetails.getProduct().getDesignation()}"></td>
+                                        <td th:text="${orderDetails.getUnitPrice()}"></td>
+                                        <td th:text="${orderDetails.getQuantity()}"></td>
+                                    </tr>
+                                    </tbody>
+                                    <tfoot>
+                                    <tr>
+                                        <th>Produit</th>
+                                        <th>Prix</th>
+                                        <th>Quantite</th>
+                                    </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Page footer -->
+        <footer th:replace="~{fragments/footer}"></footer>
+    </div>
+</div>
+
+<script th:replace="~{fragments/script}"></script>
 </body>
+
 </html>

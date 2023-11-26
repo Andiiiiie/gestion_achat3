@@ -1,4 +1,4 @@
-package com.example.gestion_achat2.config;
+package com.example.gestion_achat3.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

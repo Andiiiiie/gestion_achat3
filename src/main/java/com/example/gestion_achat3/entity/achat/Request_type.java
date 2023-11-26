@@ -1,4 +1,4 @@
-package com.example.gestion_achat2.entity.achat;
+package com.example.gestion_achat3.entity.achat;
 
 import jakarta.persistence.*;
 import lombok.Getter;

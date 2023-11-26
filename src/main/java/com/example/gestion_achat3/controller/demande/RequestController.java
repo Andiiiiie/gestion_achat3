@@ -1,21 +1,123 @@
-package com.example.gestion_achat2.controller.demande;
+package com.example.gestion_achat3.controller.demande;
 
+import com.example.gestion_achat3.entity.achat.Product;
+import com.example.gestion_achat3.entity.achat.Request;
+import com.example.gestion_achat3.entity.achat.Request_type;
+import com.example.gestion_achat3.repository.*;
+import com.example.gestion_achat3.service.ConnexionBase;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.util.List;
+
 @Controller
 public class RequestController {
+    OrderRepository orderRepository;
+    OrderDetailsRepository orderDetailsRepository;
+    UserRepository userRepository;
+    ProductRepository productRepository;
+    PurchaseRepository purchaseRepository;
+    RequestRepository requestRepository;
+    Request_typeRepository request_typeRepository;
+    ServiceRepository serviceRepository;
+    SupplierRepository supplierRepository;
+
+    ProformaRepository proformaRepository;
+    private final ProformaDetailsRepository proformaDetailsRepository;
+
+    public RequestController(OrderRepository orderRepository, OrderDetailsRepository orderDetailsRepository, UserRepository userRepository, ProductRepository productRepository, PurchaseRepository purchaseRepository, RequestRepository requestRepository, Request_typeRepository request_typeRepository, ServiceRepository serviceRepository, SupplierRepository supplierRepository, ProformaRepository proformaRepository,
+                             ProformaDetailsRepository proformaDetailsRepository) {
+        this.orderRepository = orderRepository;
+        this.orderDetailsRepository = orderDetailsRepository;
+        this.userRepository = userRepository;
+        this.productRepository = productRepository;
+        this.purchaseRepository = purchaseRepository;
+        this.requestRepository = requestRepository;
+        this.request_typeRepository = request_typeRepository;
+        this.serviceRepository = serviceRepository;
+        this.supplierRepository = supplierRepository;
+        this.proformaRepository = proformaRepository;
+        this.proformaDetailsRepository = proformaDetailsRepository;
+    }
+
     @GetMapping("request/ask")
-    public String demande()
+    public String demande(@ModelAttribute Request request, Model model)
     {
-        return "";
+        List<Product> productList = productRepository.findAll();
+        List<Request_type> request_typeList = request_typeRepository.findAll();
+        model.addAttribute("productList", productList);
+        model.addAttribute("request_typeList", request_typeList);
+        return "request/insert";
+    }
+
+    @GetMapping("request/list_chef")
+    public String list_demandes_chef(@ModelAttribute Request request,Model model)
+    {
+        List<Request> requestList=requestRepository.findByState(0);
+        model.addAttribute("requestList",requestList);
+        return "request/list_chef";
+    }
+
+
+    @GetMapping("request/list_achat")
+    public String list_demandes_achat(@ModelAttribute Request request,Model model)
+    {
+        List<Request> requestList=requestRepository.findByState(1);
+        model.addAttribute("requestList",requestList);
+        return "request/list_chef";
+    }
+
+
+    @GetMapping("request/validate/{id}")
+    public String validate(Model model,@PathVariable Integer id)
+    {
+        ConnexionBase connexionBase=new ConnexionBase(orderRepository,orderDetailsRepository,userRepository,productRepository,purchaseRepository,requestRepository,request_typeRepository,serviceRepository,supplierRepository,proformaRepository,proformaDetailsRepository);
+        Request request=requestRepository.findById(id).get();
+        if(request.valider(connexionBase)==1)
+        {
+            return "redirect:/request/list_chef";
+        }
+        else
+        {
+            return "redirect:/request/list_achat";
+        }
+    }
+
+    @GetMapping("request/refuse/{id}")
+    public String refuse(Model model,@PathVariable Integer id)
+    {
+        ConnexionBase connexionBase=new ConnexionBase(orderRepository,orderDetailsRepository,userRepository,productRepository,purchaseRepository,requestRepository,request_typeRepository,serviceRepository,supplierRepository,proformaRepository,proformaDetailsRepository);
+        Request request=requestRepository.findById(id).get();
+        if(request.refuser(connexionBase)==1)
+        {
+            return "redirect:/request/list_chef";
+        }
+        else
+        {
+            return "redirect:/request/list_achat";
+        }
     }
     @PostMapping("request/save")
-    public String inserer()
+    public String inserer(@ModelAttribute Request request,Model model,BindingResult bindingResult)
     {
-        return "";
+        ConnexionBase connexionBase=new ConnexionBase(orderRepository,orderDetailsRepository,userRepository,productRepository,purchaseRepository,requestRepository,request_typeRepository,serviceRepository,supplierRepository,proformaRepository,proformaDetailsRepository);
+        try {
+            request.demander(connexionBase);
+        }catch (Exception e)
+        {
+            List<Product> productList = productRepository.findAll();
+            List<Request_type> request_typeList = request_typeRepository.findAll();
+            model.addAttribute("productList", productList);
+            model.addAttribute("request_typeList", request_typeList);
+            model.addAttribute("error",e.getMessage());
+            return "request/insert";
+        }
+        return "redirect:/request/ask";
     }
     @GetMapping("request/valider/{id}")
     public String valider_chef_service(@PathVariable Integer id)

@@ -1,6 +1,7 @@
-package com.example.gestion_achat2.entity.achat;
+package com.example.gestion_achat3.entity.achat;
 
-import com.example.gestion_achat2.entity.global.User;
+import com.example.gestion_achat3.entity.global.User;
+import com.example.gestion_achat3.service.ConnexionBase;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -22,6 +23,9 @@ public class Request {
 
     @Column(name = "quantity")
     private Integer quantity;
+
+    @Column(name = "reason")
+    private String reason;
 
     //0 si en attente, 1 valide par superieur de service ,10 si valide par service achat
     @Column(name = "state")
@@ -53,9 +57,150 @@ public class Request {
 
 
 
+    public void demander(ConnexionBase connexionBase)
+    {
+        if(reason.equals(""))
+        {
+            throw  new RuntimeException("raison inexistante");
+        }
+        if(quantity<0)
+        {
+            throw  new RuntimeException("quantite invalide");
+        }
+        this.setQuantity(this.getQuantity());
+        this.setUser_requester(connexionBase.get_connected());
+        this.setState(0);
+        this.setRequestdate(LocalDate.now());
+        connexionBase.getRequestRepository().save(this);
+    }
+
+
+    public int valider(ConnexionBase connexionBase)
+    {
+        if(this.getState()==0)
+        {
+            this.setState(1);
+            this.setUser_validator1(connexionBase.get_connected());
+            connexionBase.getRequestRepository().save(this);
+            return 1;
+        }
+        else
+        {
+            this.setState(10);
+            this.setUser_validator2(connexionBase.get_connected());
+            connexionBase.getRequestRepository().save(this);
+            return 10;
+        }
+    }
+
+    public int refuser(ConnexionBase connexionBase)
+    {
+        if(this.getState()==0)
+        {
+            this.setState(-1);
+            this.setUser_validator1(connexionBase.get_connected());
+            connexionBase.getRequestRepository().save(this);
+            return 1;
+        }
+        else
+        {
+            this.setState(-10);
+            this.setUser_validator2(connexionBase.get_connected());
+            connexionBase.getRequestRepository().save(this);
+            return 10;
+        }
+    }
+
+
     //getter and setter
 
 
+    public User getUser_requester() {
+        return user_requester;
+    }
 
+    public void setUser_requester(User user_requester) {
+        this.user_requester = user_requester;
+    }
 
+    public Request_type getRequest_type() {
+        return request_type;
+    }
+
+    public void setRequest_type(Request_type request_type) {
+        this.request_type = request_type;
+    }
+
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Integer quantity) {
+
+        this.quantity = quantity;
+    }
+
+    public String getReason() {
+        return reason;
+    }
+
+    public void setReason(String reason) {
+        this.reason = reason;
+    }
+
+    public Integer getState() {
+        return state;
+    }
+
+    public void setState(Integer state) {
+        this.state = state;
+    }
+
+    public Purchase getPurchase() {
+        return purchase;
+    }
+
+    public void setPurchase(Purchase purchase) {
+        this.purchase = purchase;
+    }
+
+    public LocalDate getRequestdate() {
+        return requestdate;
+    }
+
+    public void setRequestdate(LocalDate requestdate) {
+        this.requestdate = requestdate;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+
+    public User getUser_validator2() {
+        return user_validator2;
+    }
+
+    public void setUser_validator2(User user_validator2) {
+        this.user_validator2 = user_validator2;
+    }
+
+    public User getUser_validator1() {
+        return user_validator1;
+    }
+
+    public void setUser_validator1(User user_validator1) {
+        this.user_validator1 = user_validator1;
+    }
 }

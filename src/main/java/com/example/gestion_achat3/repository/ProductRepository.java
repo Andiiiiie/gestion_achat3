@@ -1,4 +1,7 @@
 package com.example.gestion_achat3.repository;
 
-public interface ProductRepository extends org.springframework.data.jpa.repository.JpaRepository<com.example.gestion_achat3.entity.achat.Product, java.lang.Integer> {
+import com.example.gestion_achat3.entity.achat.Product;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface ProductRepository extends JpaRepository<Product, Integer> {
 }

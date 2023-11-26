@@ -1,8 +1,11 @@
-package com.example.gestion_achat2.entity.global;
+package com.example.gestion_achat3.entity.global;
 
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -38,5 +41,23 @@ public class User {
 
     @Column(name = "address")
     private String address;
+
+
+    public boolean is_role(String r)
+    {
+        String maChaine = this.getRoles();
+        String[] valeurs = maChaine.split(",");
+        List<String> maListe=new ArrayList<>();
+        for(int i=0;i<valeurs.length;i++)
+        {
+            maListe.add(valeurs[i]);
+        }
+        if (maListe.contains(r)) {
+            return true;
+        } else {
+            return false;
+        }
+
+    }
 
 }

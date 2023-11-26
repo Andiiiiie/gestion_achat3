@@ -1,6 +1,6 @@
-package com.example.gestion_achat2.controller.global;
+package com.example.gestion_achat3.controller.global;
 
-import com.example.gestion_achat2.entity.global.User;
+import com.example.gestion_achat3.entity.global.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;

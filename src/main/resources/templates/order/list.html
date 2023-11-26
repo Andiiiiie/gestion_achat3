@@ -1,10 +1,75 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
+
+<head th:replace="~{fragments/head :: head(title='Liste des bon de commandes a valider')}"></head>
+
+<body class="layout-boxed">
+
+<div class="page">
+    <header th:replace="~{fragments/navbar}"></header>
+    <header th:replace="~{fragments/menu}"></header>
+
+    <div class="page-wrapper">
+        <!-- Page header -->
+        <div th:replace="~{fragments/page_header :: pageHeader(pageTitle='Liste des bon de commandes a valider')}"></div>
+
+        <!-- Page body -->
+        <div class="page-body">
+            <div class="container-xl">
+                <!-- Content here -->
+
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+
+                            <div class="card-body">
+                                <table id="table" class="table table-bordered table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th>Fournisseur</th>
+                                        <th>Montant</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="order: ${orderList}">
+                                        <td th:text="${order.getSupplier().getName()}"></td>
+                                        <td th:text="${order.getPrix_ttc()}"></td>
+                                        <td>
+                                            <a th:href="@{/order/validate/{id} (id=${order.getId()})}" class="btn btn-warning">
+                                                valider
+                                            </a>
+                                            <a th:href="@{/order/refuse/{id} (id=${order.getId()})}" class="btn btn-warning">
+                                                refuser
+                                            </a>
+                                            <a th:href="@{/order/details/{id} (id=${order.getId()})}" class="btn btn-warning">
+                                                details
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                    <tfoot>
+                                    <tr>
+                                        <th>Fournisseur</th>
+                                        <th>Montant</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Page footer -->
+        <footer th:replace="~{fragments/footer}"></footer>
+    </div>
+</div>
+
+<script th:replace="~{fragments/script}"></script>
 </body>
+
 </html>

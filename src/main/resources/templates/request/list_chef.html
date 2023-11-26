@@ -1,10 +1,81 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
+
+<head th:replace="~{fragments/head :: head(title='Liste des demandes en attente')}"></head>
+
+<body class="layout-boxed">
+
+<div class="page">
+    <header th:replace="~{fragments/navbar}"></header>
+    <header th:replace="~{fragments/menu}"></header>
+
+    <div class="page-wrapper">
+        <!-- Page header -->
+        <div th:replace="~{fragments/page_header :: pageHeader(pageTitle='Liste des demandes en attente')}"></div>
+
+        <!-- Page body -->
+        <div class="page-body">
+            <div class="container-xl">
+                <!-- Content here -->
+
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+
+                            <div class="card-body">
+                                <table id="table" class="table table-bordered table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th>date</th>
+                                        <th>Service</th>
+                                        <th>Produit</th>
+                                        <th>Quantite</th>
+                                        <th>Type</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="request: ${requestList}">
+                                        <td th:text="${request.getRequestdate()}"></td>
+                                        <td th:text="${request.getUser_requester().getService().getName()}"></td>
+                                        <td th:text="${request.getProduct().getDesignation()}"></td>
+                                        <td th:text="${request.getQuantity()}"></td>
+                                        <td th:text="${request.getRequest_type().getDesignation()}"></td>
+                                        <td>
+                                            <a th:href="@{/request/validate/{id} (id=${request.getId()})}" class="btn btn-warning">
+                                                accepter
+                                            </a>
+                                            <a th:href="@{/request/refuse/{id} (id=${request.getId()})}" class="btn btn-danger">
+                                                refuser
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                    <tfoot>
+                                    <tr>
+                                        <th>date</th>
+                                        <th>Service</th>
+                                        <th>Produit</th>
+                                        <th>Quantite</th>
+                                        <th>Type</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Page footer -->
+        <footer th:replace="~{fragments/footer}"></footer>
+    </div>
+</div>
+
+<script th:replace="~{fragments/script}"></script>
 </body>
+
 </html>

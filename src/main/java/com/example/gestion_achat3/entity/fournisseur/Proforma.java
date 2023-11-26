@@ -1,11 +1,13 @@
-package com.example.gestion_achat2.entity.fournisseur;
+package com.example.gestion_achat3.entity.fournisseur;
 
-import com.example.gestion_achat2.entity.achat.Product;
+import com.example.gestion_achat3.entity.achat.Product;
+import com.example.gestion_achat3.service.ConnexionBase;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Getter
 @Setter
@@ -27,14 +29,33 @@ public class Proforma {
     @Column(name = "ref")
     private String ref;
 
-    @Column(name = "prix_unitaire")
-    private Double prix_unitaire;
+    @Column(name = "prix_ht")
+    private Double prix_ht;
 
-    @Column(name = "quantite_dispo")
-    private Integer quantite_dispo;
+    @Column(name = "prix_ttc")
+    private Double prix_ttc;
 
-    @ManyToOne
-    @JoinColumn(name = "product_id")
-    private Product product;
+    @Column(name = "tva")
+    private Double tva;
+
+    @Column(name = "date_demande")
+    private LocalDate date_demande;
+
+
+    public List<ProformaDetails> get_proforma(ConnexionBase connexionBase)
+    {
+        List<ProformaDetails> proformaDetailsList=connexionBase.getProformaDetailsRepository().findByProforma(this);
+
+        return proformaDetailsList;
+    }
+
+    @Column(name = "state")
+    private Integer state;
+
+    public double get_Prix_produit(ConnexionBase connexionBase, Product product)
+    {
+        return connexionBase.getProformaDetailsRepository().findByProformaAndProduct(this,product).getUnitPrice();
+    }
+
 
 }

@@ -1,10 +1,68 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
+
+<head th:replace="~{fragments/head :: head(title='Liste des commades chez ce fournisseur')}"></head>
+
+<body class="layout-boxed">
+
+<div class="page">
+    <header th:replace="~{fragments/navbar}"></header>
+    <header th:replace="~{fragments/menu}"></header>
+
+    <div class="page-wrapper">
+        <!-- Page header -->
+        <div th:replace="~{fragments/page_header :: pageHeader(pageTitle='Liste des commades chez ce fournisseur')}"></div>
+
+        <!-- Page body -->
+        <div class="page-body">
+            <div class="container-xl">
+                <!-- Content here -->
+
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+
+                            <div class="card-body">
+                                <table id="table" class="table table-bordered table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th>Produit</th>
+                                        <th>Quantite</th>
+<!--                                        <th>Prix unitaire</th>-->
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="order: ${orderDetailsList}">
+                                        <td th:text="${order.getProduct().getDesignation()}"></td>
+                                        <td th:text="${order.getQuantity()}"></td>
+<!--                                        <td th:text="${order.}"></td>-->
+                                    </tr>
+                                    </tbody>
+                                    <tfoot>
+                                    <tr>
+                                        <th>Produit</th>
+                                        <th>Quantite</th>
+<!--                                        <th>Prix unitaire</th>-->
+                                    </tr>
+                                    </tfoot>
+                                </table>
+                                <a th:href="@{/supplier/generate_order/{id} (id=${supplier.getId()})}" class="btn btn-warning">
+                                    generer bon de commande
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Page footer -->
+        <footer th:replace="~{fragments/footer}"></footer>
+    </div>
+</div>
+
+<script th:replace="~{fragments/script}"></script>
 </body>
+
 </html>

@@ -1,4 +1,4 @@
-package com.example.gestion_achat2.controller.global;
+package com.example.gestion_achat3.controller.global;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

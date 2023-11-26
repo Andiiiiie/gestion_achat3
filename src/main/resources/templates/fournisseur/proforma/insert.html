@@ -1,10 +1,66 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
 
+<head th:replace="~{fragments/head :: head(title='Insertion proforma')}"></head>
+
+<body class="layout-boxed">
+
+<div class="page">
+    <header th:replace="~{fragments/navbar}"></header>
+    <header th:replace="~{fragments/menu}"></header>
+
+    <div class="page-wrapper">
+        <!-- Page header -->
+        <div th:replace="~{fragments/page_header :: pageHeader(pageTitle='Insertion proforma')}"></div>
+
+        <!-- Page body -->
+        <div class="page-body">
+            <div class="container-xl">
+                <!-- Content here -->
+
+                <div class="row">
+                    <div class="col-12">
+                        <form class="card"   th:action="@{/proformat/save}" method="post">
+                            <div class="card-body">
+                                <div class="row" th:each="proformaDetail : ${proformaDetailsList}">
+                                    <h3 th:text="${proformaDetail.getProduct().getDesignation()}"></h3>
+                                    <h3 th:text="${proformaDetail.getPurchase().getQuantity()}"></h3>
+                                    <input type="hidden"  name="id[]" th:value="${proformaDetail.getId()}" />
+                                    <div class="col-sm-6 col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">Prix unitaire</label>
+                                            <input type="text" name="prix[]" class="form-control"
+                                                   required />
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 col-md-6">
+                                        <div class="mb-3">
+                                            <label class="form-label">Quantite en stock  </label>
+                                            <input type="number"  name="quantite[]" class="form-control"
+                                                   required />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card-footer d-flex justify-content-end">
+                                <button type="submit" class="btn btn-success">
+                                    Envoyer
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Page footer -->
+        <footer th:replace="~{fragments/footer}"></footer>
+    </div>
+</div>
+
+<script th:replace="~{fragments/script}"></script>
 </body>
+
 </html>
