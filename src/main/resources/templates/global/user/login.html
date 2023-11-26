@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
+
+<head th:replace="~{fragments/head :: head(title='Page de connexion')}"></head>
+
+<body class="d-flex flex-column">
+    <div class="page page-center">
+        <div class="container container-normal py-4">
+            <div class="row align-items-center g-4">
+                <div class="col-lg">
+                    <div class="container-tight">
+                        <div class="text-center mb-4">
+                            <a href="" class="navbar-brand navbar-brand-autodark"><img src="/res/logo.svg" height="36" alt=""></a>
+                        </div>
+                        <div class="card card-md">
+                            <div class="card-body">
+                                <h2 class="h2 text-center mb-4">Se connecter à votre compte</h2>
+
+                                <p class="text-center text-danger" th:if="${param.error}">
+                                    <strong>Email ou mot de passe incorrect</strong>
+                                </p>
+
+                                <p class="text-center text-warning" th:if="${param.logout}">
+                                    <strong>Vous avez été déconnecté avec succès</strong>
+                                </p>
+
+                                <form id="loginForm" method="post" th:action="@{/login}" th:object="${user}">
+                                    <div class="mb-3">
+                                        <label class="form-label">Adresse email</label>
+                                        <input type="email" class="form-control" placeholder="votre@email.com"
+                                               th:field="*{email}" required autocomplete="off">
+                                    </div>
+                                    <div class="mb-2">
+                                        <label class="form-label">
+                                            Mot de passe
+                                        </label>
+                                        <input type="password" class="form-control"  placeholder="xxxxxxxx"
+                                               th:field="*{password}" required autocomplete="off">
+                                    </div>
+                                    <div class="form-footer">
+                                        <button type="submit" class="btn btn-primary w-100">
+                                            Se connecter
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="hr-text">ou</div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col"><a href="#" class="btn w-100">
+                                        <i class="fa-solid fa-sign-in-alt mx-2"></i>
+                                        S'inscrire
+                                    </a></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-center text-muted mt-3">
+                            Mot de passe oublié? <a href="#" tabindex="-1">Récupérer mon compte</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg d-none d-lg-block">
+                    <img src="/res/illustrations/undraw_secure_login_pdn4.svg" height="300" class="d-block mx-auto" alt="">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script th:replace="~{fragments/script}"></script>
+</body>
+
+</html>
