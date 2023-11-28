@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="fr">
 
-<head th:replace="~{fragments/head :: head(title='Liste des achats sans commandes')}"></head>
+<head th:replace="~{fragments/head :: head(title='Liste des demandes en attente')}"></head>
 
 <body class="layout-boxed">
 
@@ -11,7 +11,7 @@
 
     <div class="page-wrapper">
         <!-- Page header -->
-        <div th:replace="~{fragments/page_header :: pageHeader(pageTitle='Liste des achats à commander')}"></div>
+        <div th:replace="~{fragments/page_header :: pageHeader(pageTitle='Liste des demandes en attente')}"></div>
 
         <!-- Page body -->
         <div class="page-body">
@@ -21,38 +21,45 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="card">
-                            <div class="card-header">
-                                <a class="btn btn-primary" th:href="@{/supplier/list}">
-                                    Envoyer un bon de commande
-                                    <i class="fa-solid fa-paper-plane mx-2"></i>
-                                </a>
-                            </div>
+
                             <div class="card-body">
                                 <table id="table" class="table table-bordered table-striped">
                                     <thead>
                                     <tr>
+                                        <th>Date</th>
+                                        <th>Service</th>
                                         <th>Produit</th>
                                         <th>Quantite</th>
+                                        <th>Type</th>
                                         <th>Actions</th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr th:each="purchase: ${purchaseList}">
-                                        <td th:text="${purchase.getProduct().getDesignation()}"></td>
-                                        <td th:text="${purchase.getQuantity()}"></td>
+                                    <tr th:each="request: ${requestList}">
+                                        <td th:text="${request.getRequestdate()}"></td>
+                                        <td th:text="${request.getUser_requester.getService().getName()}"></td>
+                                        <td th:text="${request.getProduct().getDesignation()}"></td>
+                                        <td th:text="${request.getQuantity()}"></td>
+                                        <td th:text="${request.getRequest_type().getDesignation()}"></td>
                                         <td>
-                                            <a th:href="@{/purchase/generate_order/{id} (id=${purchase.getId()})}" class="btn btn-warning btn-sm">
-                                                Ajouter au bon de commande
-                                                <i class="fa-solid fa-plus mx-1"></i>
+                                            <a th:href="@{/request/validate/{id} (id=${request.getId()})}" class="btn btn-warning btn-sm">
+                                                <i class="fa-solid fa-check mx-1"></i>
+                                                Accepter
                                             </a>
-
+                                            <a th:href="@{/request/refuse/{id} (id=${request.getId()})}" class="btn btn-danger btn-sm">
+                                                <i class="fa-solid fa-xmark mx-1"></i>
+                                                refuser
+                                            </a>
                                         </td>
                                     </tr>
                                     </tbody>
                                     <tfoot>
                                     <tr>
+                                        <th>Date</th>
+                                        <th>Service</th>
                                         <th>Produit</th>
                                         <th>Quantite</th>
+                                        <th>Type</th>
                                         <th>Actions</th>
                                     </tr>
                                     </tfoot>

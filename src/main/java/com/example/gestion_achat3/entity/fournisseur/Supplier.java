@@ -37,7 +37,7 @@ public class Supplier {
     private Integer id;
 
 
-    public void demande_proformat(ConnexionBase connexionBase,List<Purchase> purchaseList)
+    public Proforma demande_proformat(ConnexionBase connexionBase,List<Purchase> purchaseList)
     {
 
         Proforma proforma=new Proforma();
@@ -55,7 +55,7 @@ public class Supplier {
             purchase.setState(purchase.getState()+1);
             connexionBase.getPurchaseRepository().save(purchase);
         }
-
+        return proforma;
     }
 
     public List<Purchase> get_achats_sans_demande(ConnexionBase connexionBase)
@@ -83,9 +83,9 @@ public class Supplier {
     public Order get_bon_de_commande(ConnexionBase connexionBase)
     {
         List<OrderDetails> orderDetailsList=connexionBase.getOrderDetailsRepository().findByProforma_Supplier_order_null(this);
-        if(orderDetailsList.size()==0)
+        if(orderDetailsList.isEmpty())
         {
-            throw  new RuntimeException("aucune commande ");
+            throw  new RuntimeException("Auncune commande pour faire un bon de commande sur ce fournisseur");
         }
         Order order=new Order();
         order.setSupplier(this);

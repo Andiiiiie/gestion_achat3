@@ -3,6 +3,7 @@ package com.example.gestion_achat3.controller.demande;
 import com.example.gestion_achat3.entity.achat.Product;
 import com.example.gestion_achat3.entity.achat.Request;
 import com.example.gestion_achat3.entity.achat.Request_type;
+import com.example.gestion_achat3.entity.global.User;
 import com.example.gestion_achat3.repository.*;
 import com.example.gestion_achat3.service.ConnexionBase;
 import org.springframework.stereotype.Controller;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -58,8 +60,11 @@ public class RequestController {
     @GetMapping("request/list_chef")
     public String list_demandes_chef(@ModelAttribute Request request,Model model)
     {
-        List<Request> requestList=requestRepository.findByState(0);
+        ConnexionBase connexionBase=new ConnexionBase(orderRepository,orderDetailsRepository,userRepository,productRepository,purchaseRepository,requestRepository,request_typeRepository,serviceRepository,supplierRepository,proformaRepository,proformaDetailsRepository);
+        User user=connexionBase.get_connected();
+        List<Request> requestList=requestRepository.findByStateAndUser_requesterService(0, user.getService());
         model.addAttribute("requestList",requestList);
+        model.addAttribute("service", user.getService());
         return "request/list_chef";
     }
 
@@ -69,7 +74,7 @@ public class RequestController {
     {
         List<Request> requestList=requestRepository.findByState(1);
         model.addAttribute("requestList",requestList);
-        return "request/list_chef";
+        return "request/list";
     }
 
 
@@ -103,19 +108,15 @@ public class RequestController {
         }
     }
     @PostMapping("request/save")
-    public String inserer(@ModelAttribute Request request,Model model,BindingResult bindingResult)
+    public String inserer(@ModelAttribute Request request, Model model, RedirectAttributes redirectAttributes)
     {
         ConnexionBase connexionBase=new ConnexionBase(orderRepository,orderDetailsRepository,userRepository,productRepository,purchaseRepository,requestRepository,request_typeRepository,serviceRepository,supplierRepository,proformaRepository,proformaDetailsRepository);
         try {
             request.demander(connexionBase);
         }catch (Exception e)
         {
-            List<Product> productList = productRepository.findAll();
-            List<Request_type> request_typeList = request_typeRepository.findAll();
-            model.addAttribute("productList", productList);
-            model.addAttribute("request_typeList", request_typeList);
-            model.addAttribute("error",e.getMessage());
-            return "request/insert";
+            redirectAttributes.addFlashAttribute("error",e.getMessage());
+            return "redirect:/request/ask";
         }
         return "redirect:/request/ask";
     }

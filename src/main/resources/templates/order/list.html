@@ -27,23 +27,23 @@
                                     <thead>
                                     <tr>
                                         <th>Fournisseur</th>
-                                        <th>Montant</th>
+                                        <th>Montant TTC</th>
                                         <th>Actions</th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     <tr th:each="order: ${orderList}">
                                         <td th:text="${order.getSupplier().getName()}"></td>
-                                        <td th:text="${order.getPrix_ttc()}"></td>
+                                        <td th:text="${#numbers.formatCurrency(order.getPrix_ttc())}"></td>
                                         <td>
-                                            <a th:href="@{/order/validate/{id} (id=${order.getId()})}" class="btn btn-warning">
-                                                valider
+                                            <a th:href="@{/order/refuse/{id} (id=${order.getId()})}" class="btn btn-danger btn-sm">
+                                                Refuser <i class="fa-solid fa-xmark mx-2"></i>
                                             </a>
-                                            <a th:href="@{/order/refuse/{id} (id=${order.getId()})}" class="btn btn-warning">
-                                                refuser
+                                            <a th:href="@{/order/validate/{id} (id=${order.getId()})}" class="btn btn-success btn-sm">
+                                                Valider <i class="fa-solid fa-check mx-2"></i>
                                             </a>
-                                            <a th:href="@{/order/details/{id} (id=${order.getId()})}" class="btn btn-warning">
-                                                details
+                                            <a th:href="@{/order/details/{id} (id=${order.getId()})}" class="btn btn-primary btn-sm">
+                                                Voir <i class="fa-solid fa-eye mx-2"></i>
                                             </a>
                                         </td>
                                     </tr>

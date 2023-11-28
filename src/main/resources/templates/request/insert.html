@@ -11,7 +11,7 @@
 
     <div class="page-wrapper">
         <!-- Page header -->
-        <div th:replace="~{fragments/page_header :: pageHeader(pageTitle='Demande')}"></div>
+        <div th:replace="~{fragments/page_header :: pageHeader(pageTitle='Demande d\'achat')}"></div>
 
         <!-- Page body -->
         <div class="page-body">
@@ -20,20 +20,21 @@
 
                 <div class="row">
                     <div class="col-12">
-                        <form class="card"  th:object="${request}" th:action="@{/request/save}" method="post">
-                            <div class="card-header">
+                        <form class="card"  th:object="${request}" th:action="@{/request/save}" method="post" id="form">
+                            <!--<div class="card-header">
                                 <a th:href="@{/job/list}" class="btn btn-primary">
                                     Rajouter nouveau produit
                                     <i class="fa-solid fa-list mx-2"></i>
                                 </a>
-                            </div>
+                            </div>-->
 
                             <div class="card-body">
+                                <p th:text="${error}" class="text-danger"></p>
                                 <div class="row">
                                     <div class="col-sm-6 col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label">Produit</label>
-                                            <select class="form-select" th:field="*{product}">
+                                            <select class="form-select" th:field="*{product}" required>
                                                 <option th:each="product: ${productList}" th:text="${product.getDesignation()}" th:value="${product.getId()}">
                                                 </option>
                                             </select>
@@ -49,14 +50,14 @@
                                     <div class="col-sm-6 col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label">Quantite</label>
-                                            <input type="number" class="form-control" th:field="*{quantity}"
+                                            <input type="number" class="form-control" th:field="*{quantity}" min="0" placeholder="0"
                                                    required />
                                         </div>
                                     </div>
                                     <div class="col-sm-6 col-md-6">
                                         <div class="mb-3">
                                             <label class="form-label">Type</label>
-                                            <select class="form-select" th:field="*{request_type}">
+                                            <select class="form-select" th:field="*{request_type}" required>
                                                 <option th:each="request_type: ${request_typeList}" th:text="${request_type.getDesignation()}" th:value="${request_type.getId()}">
                                                 </option>
                                             </select>
@@ -70,9 +71,6 @@
                                     Enregistrer
                                 </button>
                             </div>
-                            <h2 th:if="${error!=null}" style="color: red">
-                                <p th:text="${error}"></p>
-                            </h2>
                         </form>
                     </div>
                 </div>

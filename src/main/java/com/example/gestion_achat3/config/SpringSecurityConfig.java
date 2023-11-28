@@ -22,11 +22,12 @@ public class SpringSecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http.authorizeHttpRequests(
                         auth -> {
+                            auth.requestMatchers("/proformat/form/**", "/proformat/save", "/order/export/**").permitAll();
                             auth.requestMatchers("/css/**", "/js/**", "/img/**", "/libs/**", "/res/**", "/login").permitAll();
 
-                            auth.requestMatchers("/rh").hasRole("RH");
+                            /*auth.requestMatchers("/rh").hasRole("RH");
                             auth.requestMatchers("/service").hasRole("SERVICE");
-                            auth.requestMatchers("/user").hasRole("USER");
+                            auth.requestMatchers("/user").hasRole("USER");*/
 
                             auth.anyRequest().authenticated();
                         }

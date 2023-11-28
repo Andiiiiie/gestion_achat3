@@ -7,6 +7,7 @@ import com.example.gestion_achat3.service.ConnexionBase;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import pl.allegro.finance.tradukisto.ValueConverters;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -60,6 +61,12 @@ public class Order {
             //mandefa mail
         }
         connexionBase.getOrderRepository().save(this);
+    }
+
+    public String getPrixTTCInLetter() {
+        ValueConverters converter = ValueConverters.FRENCH_INTEGER;
+        int prix = (int) Math.round(getPrix_ttc());
+        return converter.asWords(prix);
     }
 
 

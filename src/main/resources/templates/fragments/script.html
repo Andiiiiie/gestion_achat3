@@ -272,7 +272,7 @@
 <script src="/libs/jquery-validation/dist/jquery.validate.min.js"></script>
 <script src="/libs/jquery-validation/dist/localization/messages_fr.min.js"></script>
 <script>
-    $("form").validate(
+    $("#form").validate(
         {
             errorClass: "invalid-feedback",
             errorElement: "div",
@@ -291,7 +291,61 @@
             }
         }
     );
+
+
 </script>
+
 
 <!-- leaflet -->
 <script src="/libs/leaflet/leaflet.js"></script>
+
+<!-- Pdf -->
+<script src="/libs/html2pdf/html2pdf.bundle.min.js"></script>
+<script>
+    function generatePDF(toPrint) {
+        let elem = document.getElementById(toPrint);
+        let printContents = '<div style="margin: auto; width: min-content;">' + elem.innerHTML + '</div>';
+        let opt = {
+            margin:       10,
+            filename:     'bon_de_commande.pdf',
+            html2canvas:  { letterRendering: true, width: elem.offsetWidth, height: elem.offsetHeight },
+            jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        };
+        html2pdf().from(printContents).set(opt).save();
+    }
+</script>
+
+<script src="/js/toast.min.js"></script>
+<script th:inline="javascript">
+    let infoData = [[${infoDatas}]];
+    let successData = [[${successDatas}]];
+    let warningData = [[${warningDatas}]];
+    let errorData = [[${errorDatas}]];
+
+    function displayToast(datas, type) {
+        if(datas != null && datas.length > 0) {
+            datas.forEach(data => {
+                toastr.options = {
+                    "closeButton": true,
+                    "progressBar": true,
+                    "positionClass": "toast-top-right",
+                    "preventDuplicates": true,
+                    "showDuration": "400",
+                    "hideDuration": "1000",
+                    "timeOut": "7000",
+                    "extendedTimeOut": "1000",
+                    "showEasing": "swing",
+                    "hideEasing": "linear",
+                    "showMethod": "slideDown",
+                    "hideMethod": "slideUp"
+                };
+                toastr[type](data);
+            });
+        }
+    }
+
+    displayToast(infoData, "info");
+    displayToast(successData, "success");
+    displayToast(warningData, "warning");
+    displayToast(errorData, "error");
+</script>

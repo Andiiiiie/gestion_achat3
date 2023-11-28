@@ -21,7 +21,12 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="card">
-
+                            <div class="card-header">
+                                <a class="btn btn-primary" th:href="@{/supplier/list}">
+                                    Demander un proforma
+                                    <i class="fa-solid fa-file-alt mx-2"></i>
+                                </a>
+                            </div>
                             <div class="card-body">
                                 <table id="table" class="table table-bordered table-striped">
                                     <thead>
@@ -36,8 +41,9 @@
                                         <td th:text="${purchaseM.getPurchase().getProduct().getDesignation()}"></td>
                                         <td th:text="${purchaseM.getPurchase().getQuantity()}"></td>
                                         <td>
-                                            <a th:href="@{/purchase/details/{id} (id=${purchaseM.getPurchase().getProduct().getId()})}" class="btn btn-warning">
-                                                details
+                                            <a th:href="@{/purchase/details/{id} (id=${purchaseM.getPurchase().getProduct().getId()})}" class="btn btn-primary btn-sm">
+                                                Details
+                                                <i class="fa fa-eye mx-1"></i>
                                             </a>
                                         </td>
                                     </tr>

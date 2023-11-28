@@ -6,12 +6,10 @@
 <body class="layout-boxed">
 
 <div class="page">
-    <header th:replace="~{fragments/navbar}"></header>
-    <header th:replace="~{fragments/menu}"></header>
 
     <div class="page-wrapper">
         <!-- Page header -->
-        <div th:replace="~{fragments/page_header :: pageHeader(pageTitle='Insertion proforma')}"></div>
+        <div th:replace="~{fragments/page_header :: pageHeader(pageTitle='Création proforma')}"></div>
 
         <!-- Page body -->
         <div class="page-body">
@@ -20,24 +18,46 @@
 
                 <div class="row">
                     <div class="col-12">
-                        <form class="card"   th:action="@{/proformat/save}" method="post">
+                        <form class="card"   th:action="@{/proformat/save}" method="post" id="form">
+                            <div class="card-header">
+                                Chez <span th:text="${proforma.getSupplier().getName()}" class="badge bg-azure mx-2"></span>
+                            </div>
                             <div class="card-body">
                                 <div class="row" th:each="proformaDetail : ${proformaDetailsList}">
-                                    <h3 th:text="${proformaDetail.getProduct().getDesignation()}"></h3>
-                                    <h3 th:text="${proformaDetail.getPurchase().getQuantity()}"></h3>
-                                    <input type="hidden"  name="id[]" th:value="${proformaDetail.getId()}" />
-                                    <div class="col-sm-6 col-md-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">Prix unitaire</label>
-                                            <input type="text" name="prix[]" class="form-control"
-                                                   required />
+                                    <div class="col-6">
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <h2>Désignation:</h2>
+                                                <div th:text="${proformaDetail.getProduct().getDesignation()}" class="text-center"></div>
+                                            </div>
+                                            <div class="col-6">
+                                                <h2>Quantité voulue:</h2>
+                                                <div th:text="${proformaDetail.getPurchase().getQuantity()}" class="text-center"></div>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="col-sm-6 col-md-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">Quantite en stock  </label>
-                                            <input type="number"  name="quantite[]" class="form-control"
-                                                   required />
+                                    <input type="hidden"  name="id[]" th:value="${proformaDetail.getId()}" />
+                                    <div class="col-6">
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label">
+                                                        Prix unitaire
+                                                        <i class="fa-solid fa-money-bill mx-1"></i>
+                                                    </label>
+                                                    <input type="text" name="prix[]" class="form-control" min="0" placeholder="0"
+                                                           required />
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Quantite en stock
+                                                        <i class="fa-solid fa-box-open mx-1"></i>
+                                                    </label>
+                                                    <input type="number"  name="quantite[]" class="form-control" min="0" placeholder="0"
+                                                           required />
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -46,6 +66,7 @@
                             <div class="card-footer d-flex justify-content-end">
                                 <button type="submit" class="btn btn-success">
                                     Envoyer
+                                    <i class="fa-solid fa-paper-plane mx-1"></i>
                                 </button>
                             </div>
                         </form>
