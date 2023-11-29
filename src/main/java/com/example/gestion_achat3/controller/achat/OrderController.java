@@ -5,6 +5,7 @@ import com.example.gestion_achat3.entity.commande.OrderDetails;
 import com.example.gestion_achat3.entity.global.User;
 import com.example.gestion_achat3.repository.*;
 import com.example.gestion_achat3.service.ConnexionBase;
+import com.example.gestion_achat3.service.MailService;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.FontFactory;
@@ -21,10 +22,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.mail.MessagingException;
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.util.List;
 
 @Getter
@@ -85,18 +91,25 @@ public class OrderController {
         {
             orderList=orderRepository.findByState(3);
         }
-        model.addAttribute("orderList",orderList);
+        model.addAttribute("orderList", orderList);
         return "order/list";
     }
     @GetMapping("order/validate/{id}")
-    public String validate(@PathVariable Long id)
-    {
+    @Transactional
+    public String validate(@PathVariable Long id, RedirectAttributes redirectAttributes) throws GeneralSecurityException, IOException, MessagingException {
         ConnexionBase connexionBase=new ConnexionBase(orderRepository,orderDetailsRepository,userRepository,productRepository,purchaseRepository,requestRepository,request_typeRepository,serviceRepository,supplierRepository,proformaRepository,proformaDetailsRepository);
         Order order=orderRepository.findById(id).get();
         order.accepter(connexionBase);
         if(order.getState()==4)
         {
-            return "redirect:/order/export/"+order.getId();
+            try {
+                MailService mailService = new MailService();
+                String destinataire = "mendrika261@icloud.com";
+                mailService.sendBonDeCommande(destinataire, MailService.HOST + "order/export/" + order.getId());
+                redirectAttributes.addFlashAttribute("successData", new String[]{"Un email a été envoyé à " + destinataire});
+            } catch (Exception e) {
+                redirectAttributes.addFlashAttribute("errorData", new String[]{"Vérifier votre connexion internet"});
+            }
         }
         return "redirect:/order/list";
     }
@@ -123,75 +136,11 @@ public class OrderController {
 
 
     @GetMapping("order/export/{id}")
-    public ResponseEntity<byte[]> exportProforma(HttpServletResponse response, @PathVariable Long id) throws DocumentException {
-        Order orderConfirmation=orderRepository.findById(id).get();
-        ConnexionBase connexionBase=new ConnexionBase(orderRepository,orderDetailsRepository,userRepository,productRepository,purchaseRepository,requestRepository,request_typeRepository,serviceRepository,supplierRepository,proformaRepository,proformaDetailsRepository);
-
-        // Create a new document
-        Document document = new Document();
-
-        // Create a new ByteArrayOutputStream
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-
-        // Create a new PdfWriter
-        PdfWriter.getInstance(document,byteArrayOutputStream);
-
-        // Open the document
-        document.open();
-
-        // Add a title to the document
-        Paragraph title = new Paragraph("BON DE COMMANDE", FontFactory.getFont(FontFactory.HELVETICA_BOLD, 25));
-        document.add(title);
-
-
-        document.add(new Paragraph("Fournisseur",FontFactory.getFont(FontFactory.HELVETICA_BOLD, 25)));
-        PdfPTable table=new PdfPTable(2);
-        table.addCell("Nom:");
-        table.addCell(orderConfirmation.getSupplier().getName());
-        table.addCell("Contact:");
-        table.addCell(orderConfirmation.getSupplier().getContact());
-        table.addCell("adresse:");
-        table.addCell(orderConfirmation.getSupplier().getAdresse());
-        table.addCell("Responsable");
-        table.addCell(orderConfirmation.getSupplier().getResponsable());
-
-        document.add(table);
-
-
-        document.add(new Paragraph("DETAILS ACHAT ",FontFactory.getFont(FontFactory.HELVETICA_BOLD, 25)));
-
-        PdfPTable table1=new PdfPTable(3);
-        table1.addCell("Produit");
-        table1.addCell("Quantite");
-        table1.addCell("Prix unitaire ");
-
-
-        List<OrderDetails> orderDetailsList=orderDetailsRepository.findByOrder(orderConfirmation);
-        for(OrderDetails orderDetails:orderDetailsList)
-        {
-            table1.addCell(orderDetails.getProduct().getDesignation());
-            table1.addCell(orderDetails.getQuantity().toString());
-            table1.addCell(orderDetails.getUnitPrice().toString());
-        }
-        document.add(table1);
-
-        PdfPTable table2=new PdfPTable(2);
-        table2.addCell("Prix HT"); table2.addCell(orderConfirmation.getPrix_ht().toString());
-        table2.addCell("tva");table2.addCell(orderConfirmation.getTva().toString());
-        table2.addCell("PrixTTC");table2.addCell(orderConfirmation.getPrix_ttc().toString());
-
-        document.add(table2);
-        document.close();
-
-        // Convert the ByteArrayOutputStream to a byte array
-        byte[] bytes = byteArrayOutputStream.toByteArray();
-
-        // Create the HttpHeaders
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_PDF);
-        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=students.pdf");
-
-        // Return the byte array as a ResponseEntity
-        return new ResponseEntity<>(bytes, headers, HttpStatus.OK);
+    public String exportProforma(@PathVariable Long id, Model model) {
+        Order order=orderRepository.findById(id).get();
+        List<OrderDetails> orderDetailsList=orderDetailsRepository.findByOrder(order);
+        model.addAttribute("order",order);
+        model.addAttribute("orderDetailsList",orderDetailsList);
+        return "order/pdf";
     }
 }

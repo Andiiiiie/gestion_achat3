@@ -2,13 +2,20 @@ package com.example.gestion_achat3.controller.achat;
 
 import com.example.gestion_achat3.entity.achat.Purchase;
 import com.example.gestion_achat3.entity.commande.OrderDetails;
+import com.example.gestion_achat3.entity.fournisseur.Proforma;
 import com.example.gestion_achat3.entity.fournisseur.Supplier;
 import com.example.gestion_achat3.repository.*;
 import com.example.gestion_achat3.service.ConnexionBase;
+import com.example.gestion_achat3.service.MailService;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.mail.MessagingException;
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.List;
 @Controller
@@ -65,8 +72,8 @@ public class SupplierController {
 
 
     @PostMapping("supplier/send")
-    public String envoyer_demande(@RequestParam(value = "ids", required = true) Integer[] ids,@RequestParam(value = "supplier", required = true) Integer supplier)
-    {
+    @Transactional
+    public String envoyer_demande(@RequestParam(value = "ids", required = true) Integer[] ids, @RequestParam(value = "supplier", required = true) Integer supplier, RedirectAttributes redirectAttributes) throws GeneralSecurityException, IOException, MessagingException {
         List<Purchase> purchaseList=new ArrayList<>();
         for (int i=0;i<ids.length;i++)
         {
@@ -74,8 +81,16 @@ public class SupplierController {
         }
         Supplier supplier1=supplierRepository.findById(supplier).get();
         ConnexionBase connexionBase=new ConnexionBase(orderRepository,orderDetailsRepository,userRepository,productRepository,purchaseRepository,requestRepository,request_typeRepository,serviceRepository,supplierRepository,proformaRepository,proformaDetailsRepository);
-        supplier1.demande_proformat(connexionBase,purchaseList);
+        Proforma proforma = supplier1.demande_proformat(connexionBase,purchaseList);
 
+        try {
+            MailService mailService = new MailService();
+            String destinataire = "mendrika261@icloud.com";
+            mailService.sendProforma(destinataire, MailService.HOST + "proformat/form/" + proforma.getId());
+            redirectAttributes.addFlashAttribute("successData", "Un email a été envoyé à " + destinataire);
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorData", "Une erreur s'est produite lors de l'envoi de l'email");
+        }
 
         return "redirect:/supplier/list";
     }

@@ -11,7 +11,7 @@
 
     <div class="page-wrapper">
         <!-- Page header -->
-        <div th:replace="~{fragments/page_header :: pageHeader(pageTitle='Demande')}"></div>
+        <div th:replace="~{fragments/page_header :: pageHeader(pageTitle='Demande de proforma chez: '+${supplier.getName()})}"></div>
 
         <!-- Page body -->
         <div class="page-body">
@@ -27,10 +27,25 @@
                                     <input type="hidden" name="supplier" th:value="${supplier.getId()}">
                                     <div class="col-sm-6 col-md-6">
                                         <div class="mb-3">
-                                            <label class="form-label">Achats</label>
-                                            <div th:each="purchase : ${purchaseList}">
-                                                <input type="checkbox" name="ids" th:value="${purchase.id}" />
-                                                <label th:text="${purchase.getProduct().getDesignation()}+'  '+${purchase.getQuantity()} "></label>
+                                            <label class="form-label">
+                                                <i class="fa-solid fa-list"></i>
+                                                Cochez la liste
+                                            </label>
+                                            <div th:if="${purchaseList.isEmpty()}">
+                                                <p class="text-muted text-center mt-2">Il n'y a pas de demande pour ce fournisseur pour le moment</p>
+                                            </div>
+                                            <div class="list-group list-group-flush">
+                                                <div th:each="purchase : ${purchaseList}" class="list-group-item">
+                                                    <div class="row align-items-center">
+                                                        <div class="col-auto">
+                                                            <input type="checkbox" name="ids" th:value="${purchase.id}" class="form-check-input"/>
+                                                        </div>
+                                                        <div class="col-auto"></div>
+                                                        <div class="col text-truncate">
+                                                            <label th:text="${purchase.getProduct().getDesignation()}+'  '+${purchase.getQuantity()} "></label>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -39,7 +54,7 @@
 
                             <div class="card-footer d-flex justify-content-end">
                                 <button type="submit" class="btn btn-success">
-                                    Envoyer
+                                    Envoyer <i class="fa-solid fa-paper-plane mx-1"></i>
                                 </button>
                             </div>
                         </form>

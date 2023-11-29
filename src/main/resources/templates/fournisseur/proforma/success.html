@@ -1,1 +1,65 @@
-<h1>METY</h1>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      lang="fr">
+
+<head th:replace="~{fragments/head :: head(title='Remerciement')}"></head>
+
+<body>
+
+<div class="page page-center">
+    <div class="container container-tight py-4">
+        <div class="text-center mb-4">
+            <a href="." class="navbar-brand navbar-brand-autodark"><img src="/res/logo.svg" height="36" alt=""></a>
+        </div>
+        <div class="card card-md">
+            <div class="card-body">
+                <h2 class="mb-3">Merci pour votre réponse</h2>
+                <p class="text-muted mb-4">
+                    Vous pouvez toujours nous contacter avec les informations suivantes.
+                </p>
+                <ul class="list-unstyled space-y">
+                    <li class="row g-2">
+                <span class="col-auto">
+                    <i class="fa-solid fa-address-book"></i>
+                </span>
+                        <span class="col">
+                  <strong class="d-block">Notre adresse</strong>
+                  <span class="d-block text-muted">Immeuble 39 Andoharanofotsy, Antananarivo 101</span>
+                </span>
+                    </li>
+                    <li class="row g-2">
+                <span class="col-auto">
+                    <i class="fa-solid fa-address-card"></i>
+                </span>
+                        <span class="col">
+                  <strong class="d-block">Email</strong>
+                  <span class="d-block text-muted">responsable-achat@example.com</span>
+                </span>
+                    </li>
+                    <li class="row g-2">
+                <span class="col-auto">
+                    <i class="fa-solid fa-phone-alt"></i>
+                </span>
+                        <span class="col">
+                  <strong class="d-block">Téléphone</strong>
+                  <span class="d-block text-muted">0 20 (22) 123 45</span>
+                </span>
+                    </li>
+                </ul>
+                <div class="my-4">
+                    <a href="mailto:mendrika261@icloud.com" class="btn btn-primary w-100">
+                        Nous contacter maintenant <i class="fa-solid fa-message mx-2"></i>
+                    </a>
+                </div>
+                <p class="text-muted text-center">
+                    Passez une bonne journée 😄
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script th:replace="~{fragments/script}"></script>
+</body>
+
+</html>

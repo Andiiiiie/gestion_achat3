@@ -36,11 +36,11 @@
                                         <td th:text="${supplier.getName()}"></td>
                                         <td th:text="${supplier.getContact()}"></td>
                                         <td>
-                                            <a th:href="@{/supplier/demander/{id} (id=${supplier.getId()})}" class="btn btn-warning">
-                                                demander proforma
+                                            <a th:href="@{/supplier/demander/{id} (id=${supplier.getId()})}" class="btn btn-purple btn-sm">
+                                                Demander proforma <i class="fa-solid fa-file-invoice mx-1"></i>
                                             </a>
-                                            <a th:href="@{/supplier/generate_order/{id} (id=${supplier.getId()})}" class="btn btn-warning">
-                                                demander bon de commande
+                                            <a th:href="@{/supplier/generate_order/{id} (id=${supplier.getId()})}" class="btn btn-azure btn-sm">
+                                                Envoyer bon de commande <i class="fa-solid fa-box-archive mx-1"></i>
                                             </a>
 
                                         </td>

@@ -9,8 +9,6 @@ import com.example.gestion_achat3.service.ConnexionBase;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.core.annotation.AnnotationUtils;
-import org.springframework.security.core.parameters.P;
 
 import java.util.ArrayList;
 import java.util.List;

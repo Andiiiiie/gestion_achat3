@@ -11,7 +11,7 @@
 
     <div class="page-wrapper">
         <!-- Page header -->
-        <div th:replace="~{fragments/page_header :: pageHeader(pageTitle='Liste des demandes en attente')}"></div>
+        <div th:replace="~{fragments/page_header :: pageHeader(pageTitle='Liste des demandes en attente du service: '+${service.getName()})}"></div>
 
         <!-- Page body -->
         <div class="page-body">
@@ -26,8 +26,7 @@
                                 <table id="table" class="table table-bordered table-striped">
                                     <thead>
                                     <tr>
-                                        <th>date</th>
-                                        <th>Service</th>
+                                        <th>Date</th>
                                         <th>Produit</th>
                                         <th>Quantite</th>
                                         <th>Type</th>
@@ -37,15 +36,16 @@
                                     <tbody>
                                     <tr th:each="request: ${requestList}">
                                         <td th:text="${request.getRequestdate()}"></td>
-                                        <td th:text="${request.getUser_requester().getService().getName()}"></td>
                                         <td th:text="${request.getProduct().getDesignation()}"></td>
                                         <td th:text="${request.getQuantity()}"></td>
                                         <td th:text="${request.getRequest_type().getDesignation()}"></td>
                                         <td>
-                                            <a th:href="@{/request/validate/{id} (id=${request.getId()})}" class="btn btn-warning">
-                                                accepter
+                                            <a th:href="@{/request/validate/{id} (id=${request.getId()})}" class="btn btn-warning btn-sm">
+                                                <i class="fa-solid fa-check mx-1"></i>
+                                                Accepter
                                             </a>
-                                            <a th:href="@{/request/refuse/{id} (id=${request.getId()})}" class="btn btn-danger">
+                                            <a th:href="@{/request/refuse/{id} (id=${request.getId()})}" class="btn btn-danger btn-sm">
+                                                <i class="fa-solid fa-xmark mx-1"></i>
                                                 refuser
                                             </a>
                                         </td>
@@ -53,8 +53,7 @@
                                     </tbody>
                                     <tfoot>
                                     <tr>
-                                        <th>date</th>
-                                        <th>Service</th>
+                                        <th>Date</th>
                                         <th>Produit</th>
                                         <th>Quantite</th>
                                         <th>Type</th>

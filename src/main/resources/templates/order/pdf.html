@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
+
+<head th:replace="~{fragments/head :: head(title='Bon de commandes à valider')}"></head>
+
+<body class="layout-boxed">
+
+<div class="page">
+
+  <div class="page-wrapper">
+    <!-- Page header -->
+    <div th:replace="~{fragments/page_header :: pageHeader(pageTitle='Bon de commande pour: '+${order.getSupplier().getName()})}"></div>
+
+    <!-- Page body -->
+    <div class="page-body page-center">
+      <div class="container-xl">
+        <div class="card card-lg">
+          <div class="card-body" id="proforma">
+            <div class="row">
+              <div class="col-6">
+                <p class="h3">Notre compagnie</p>
+                <address>
+                  Batiment 39 Andoharanofotsy<br>
+                  Antananarivo 101, Madagascar<br>
+                  responsable-achat@example.com<br>
+                  0 20 (22) 123 45
+                </address>
+              </div>
+              <div class="col-6 text-end">
+                <p class="h3">
+                  <span th:text="${order.getSupplier().getName()}"></span>
+                </p>
+                <address>
+                  Mr./Mme. <span th:text="${order.getSupplier().getResponsable()}"></span><br>
+                  <span th:text="${order.getSupplier().getAdresse()}"></span><br>
+                  <span th:text="${order.getSupplier().getContact()}"></span>
+                </address>
+              </div>
+              <div class="col-12 my-5">
+                <h1>Bon de commande #BDC/<span th:text="${order.getId()}"/>/F-<span th:text="${order.getSupplier().getId()}"></span></h1>
+                <div th:if="${order.getUser_last_validator() == null}">
+                  Statut: <span class="badge bg-cyan">Non validé</span>
+                </div>
+                <div th:if="${order.getUser_last_validator() != null}">
+                  Statut: <span class="badge bg-success-lt">Validé par <span th:text="${order.getUser_last_validator().getService().getName()}"></span></span>
+                </div>
+              </div>
+            </div>
+            <table class="table table-transparent table-responsive">
+              <thead>
+              <tr>
+                <th class="text-center" style="width: 1%"></th>
+                <th>Produit</th>
+                <th class="text-center" style="width: 1%">PRIX HT</th>
+                <th class="text-end" style="width: 1%">TVA</th>
+                <th class="text-end" style="width: 1%">Prix TTC</th>
+              </tr>
+              </thead>
+              <tr th:each="orderDetails: ${orderDetailsList}">
+                <td class="text-center" th:text="${orderDetailsStat.index+1}">1</td>
+                <td>
+                  <p class="strong mb-1" th:text="${orderDetails.getProduct().getDesignation()}">Logo Creation</p>
+                  <div class="text-muted" th:text="${#numbers.formatCurrency(orderDetails.getUnitPrice()) + '*' + orderDetails.getQuantity()}"></div>
+                </td>
+                <td class="text-center" th:text="${#numbers.formatCurrency(orderDetails.getQuantity()*orderDetails.getUnitPrice()*0.8)}">
+                </td>
+                <td class="text-end" th:text="${#numbers.formatCurrency(orderDetails.getQuantity()*orderDetails.getUnitPrice()*0.2)}"></td>
+                <td class="text-end" th:text="${#numbers.formatCurrency(orderDetails.getUnitPrice()*orderDetails.getQuantity())}"></td>
+              </tr>
+
+              <tr>
+                <td colspan="4" class="strong text-end">Total HT</td>
+                <td class="text-end" th:text="${#numbers.formatCurrency(order.getPrix_ht())}"></td>
+              </tr>
+              <tr>
+                <td colspan="4" class="strong text-end">Total TVA</td>
+                <td class="text-end" th:text="${#numbers.formatCurrency(order.getTva())}"></td>
+              </tr>
+              <tr>
+                <td colspan="4" class="font-weight-bold text-uppercase text-end">Total TTC à payer</td>
+                <td class="font-weight-bold text-end" th:text="${#numbers.formatCurrency(order.getPrix_ttc())}"></td>
+              </tr>
+            </table>
+            <p class="text-muted text-center mt-5">Arrêté à la somme de <strong th:text="${order.getPrixTTCInLetter()}"></strong> Ariary</p>
+          </div>
+          <div class="card-footer d-flex justify-content-end">
+            <button class="btn btn-primary mx-2" onclick="generatePDF('proforma')">
+              Imprimer
+              <i class="fa-solid fa-print mx-1"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Page footer -->
+    <footer th:replace="~{fragments/footer}"></footer>
+  </div>
+</div>
+
+<script th:replace="~{fragments/script}"></script>
+</body>
+
+</html>

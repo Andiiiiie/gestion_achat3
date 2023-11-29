@@ -11,7 +11,7 @@
 
     <div class="page-wrapper">
         <!-- Page header -->
-        <div th:replace="~{fragments/page_header :: pageHeader(pageTitle='details achat')}"></div>
+        <div th:replace="~{fragments/page_header :: pageHeader(pageTitle='Details achat')}"></div>
 
         <!-- Page body -->
         <div class="page-body">
@@ -51,7 +51,8 @@
                                     </tfoot>
                                 </table>
                                 <a th:href="@{/purchase/validate/{id} (id=${purchase.getPurchase().getProduct().getId()})}" class="btn btn-warning">
-                                    VALIDER
+                                    Valider
+                                    <i class="fa-solid fa-check mx-2"></i>
                                 </a>
                             </div>
                         </div>

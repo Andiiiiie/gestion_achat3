@@ -49,14 +49,14 @@ public class ProformatController {
         {
             List<ProformaDetails> proformaDetailsList=proforma.get_proforma(connexionBase);
             model.addAttribute("proformaDetailsList",proformaDetailsList);
+            model.addAttribute("proforma", proforma);
             return "fournisseur/proforma/insert";
         }
         else
         {
             model.addAttribute("message","page indisponible");
-            return "error";
+            return "redirect:/error";
         }
-
     }
 
     @PostMapping("proformat/save")
