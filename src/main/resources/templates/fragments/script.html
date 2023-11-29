@@ -317,10 +317,10 @@
 
 <script src="/js/toast.min.js"></script>
 <script th:inline="javascript">
-    let infoData = [[${infoDatas}]];
-    let successData = [[${successDatas}]];
-    let warningData = [[${warningDatas}]];
-    let errorData = [[${errorDatas}]];
+    let infoData = [[${infoData}]];
+    let successData = [[${successData}]];
+    let warningData = [[${warningData}]];
+    let errorData = [[${errorData}]];
 
     function displayToast(datas, type) {
         if(datas != null && datas.length > 0) {

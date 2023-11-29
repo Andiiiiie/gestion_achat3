@@ -85,7 +85,7 @@ public class Supplier {
         List<OrderDetails> orderDetailsList=connexionBase.getOrderDetailsRepository().findByProforma_Supplier_order_null(this);
         if(orderDetailsList.isEmpty())
         {
-            throw  new RuntimeException("Auncune commande pour faire un bon de commande sur ce fournisseur");
+            throw  new RuntimeException("Aucun commande à passer pour établir un bon de commande");
         }
         Order order=new Order();
         order.setSupplier(this);
@@ -109,7 +109,10 @@ public class Supplier {
         return order;
     }
 
-
-
-
+    public int get_nbr_orders(ConnexionBase connexionBase)
+    {
+        int t=0;
+        List<OrderDetails> orderDetailsList=connexionBase.getOrderDetailsRepository().findByProforma_Supplier_order_null(this);
+        return orderDetailsList.size();
+    }
 }

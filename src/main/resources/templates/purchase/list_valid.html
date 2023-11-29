@@ -33,13 +33,15 @@
                                     <tr>
                                         <th>Produit</th>
                                         <th>Quantite</th>
+                                        <th>Fournisseur</th>
                                         <th>Actions</th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr th:each="purchase: ${purchaseList}">
+                                    <tr th:each="purchase,iterStat : ${purchaseList}">
                                         <td th:text="${purchase.getProduct().getDesignation()}"></td>
                                         <td th:text="${purchase.getQuantity()}"></td>
+                                        <td th:text="${supplierList[iterStat.index].getName()}">Emp Account</td>
                                         <td>
                                             <a th:href="@{/purchase/generate_order/{id} (id=${purchase.getId()})}" class="btn btn-warning btn-sm">
                                                 Ajouter au bon de commande
@@ -53,6 +55,7 @@
                                     <tr>
                                         <th>Produit</th>
                                         <th>Quantite</th>
+                                        <th>Fournisseur</th>
                                         <th>Actions</th>
                                     </tr>
                                     </tfoot>

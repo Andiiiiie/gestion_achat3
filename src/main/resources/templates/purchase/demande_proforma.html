@@ -28,28 +28,30 @@
                                     <tr>
                                         <th>Nom</th>
                                         <th>Contact</th>
+                                        <th>Commandes sans bon de commande</th>
                                         <th>Actions</th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr th:each="supplier: ${supplierList}">
-                                        <td th:text="${supplier.getName()}"></td>
-                                        <td th:text="${supplier.getContact()}"></td>
-                                        <td>
-                                            <a th:href="@{/supplier/demander/{id} (id=${supplier.getId()})}" class="btn btn-purple btn-sm">
-                                                Demander proforma <i class="fa-solid fa-file-invoice mx-1"></i>
-                                            </a>
-                                            <a th:href="@{/supplier/generate_order/{id} (id=${supplier.getId()})}" class="btn btn-azure btn-sm">
-                                                Envoyer bon de commande <i class="fa-solid fa-box-archive mx-1"></i>
-                                            </a>
-
-                                        </td>
-                                    </tr>
+                                        <tr th:each="supplier,iterStat: ${supplierList}">
+                                            <td th:text="${supplier.getName()}"></td>
+                                            <td th:text="${supplier.getContact()}"></td>
+                                            <td th:text="${orders_List[iterStat.index]}">Emp Account</td>
+                                            <td>
+                                                <a th:href="@{/supplier/demander/{id} (id=${supplier.getId()})}" class="btn btn-purple btn-sm">
+                                                    Demander proforma <i class="fa-solid fa-file-invoice mx-1"></i>
+                                                </a>
+                                                <a th:href="@{/supplier/generate_order/{id} (id=${supplier.getId()})}" class="btn btn-azure btn-sm">
+                                                    Envoyer bon de commande <i class="fa-solid fa-box-archive mx-1"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
                                     </tbody>
                                     <tfoot>
                                     <tr>
-                                        <th>Produit</th>
-                                        <th>Quantite</th>
+                                        <th>Nom</th>
+                                        <th>Contact</th>
+                                        <th>Commandes sans bon de commande</th>
                                         <th>Actions</th>
                                     </tr>
                                     </tfoot>

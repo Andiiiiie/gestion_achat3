@@ -65,7 +65,18 @@ public class SupplierController {
     @GetMapping("supplier/list")
     public String get_List(Model model)
     {
+        /*List<Supplier> supplierList=supplierRepository.findAll();
+        model.addAttribute("supplierList",supplierList);
+        return "purchase/demande_proforma";*/
+
+        ConnexionBase connexionBase=new ConnexionBase(orderRepository,orderDetailsRepository,userRepository,productRepository,purchaseRepository,requestRepository,request_typeRepository,serviceRepository,supplierRepository,proformaRepository,proformaDetailsRepository);
         List<Supplier> supplierList=supplierRepository.findAll();
+        List<Integer> orders_list=new ArrayList<>();
+        for (Supplier supplier:supplierList)
+        {
+            orders_list.add(supplier.get_nbr_orders(connexionBase));
+        }
+        model.addAttribute("orders_List",orders_list);
         model.addAttribute("supplierList",supplierList);
         return "purchase/demande_proforma";
     }
@@ -87,9 +98,9 @@ public class SupplierController {
             MailService mailService = new MailService();
             String destinataire = "mendrika261@icloud.com";
             mailService.sendProforma(destinataire, MailService.HOST + "proformat/form/" + proforma.getId());
-            redirectAttributes.addFlashAttribute("successData", "Un email a été envoyé à " + destinataire);
+            redirectAttributes.addFlashAttribute("successData", new String[]{"Un email a été envoyé à " + destinataire});
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("errorData", "Une erreur s'est produite lors de l'envoi de l'email");
+            redirectAttributes.addFlashAttribute("errorData", new String[]{"Une erreur s'est produite lors de l'envoi de l'email"});
         }
 
         return "redirect:/supplier/list";
@@ -106,11 +117,16 @@ public class SupplierController {
     }
 
     @GetMapping("supplier/generate_order/{id}")
-    public String generate_order(@PathVariable int id,Model model)
+    public String generate_order(@PathVariable int id, RedirectAttributes redirectAttributes)
     {
         Supplier supplier=supplierRepository.findById(id).get();
         ConnexionBase connexionBase=new ConnexionBase(orderRepository,orderDetailsRepository,userRepository,productRepository,purchaseRepository,requestRepository,request_typeRepository,serviceRepository,supplierRepository,proformaRepository,proformaDetailsRepository);
-        supplier.get_bon_de_commande(connexionBase);
+        try {
+            supplier.get_bon_de_commande(connexionBase);
+            redirectAttributes.addFlashAttribute("successData", new String[]{"Bon de commande généré, en attente de confirmation"});
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorData", new String[]{e.getMessage()});
+        }
         return "redirect:/supplier/list";
     }
 }

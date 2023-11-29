@@ -2,6 +2,7 @@ package com.example.gestion_achat3.controller.achat;
 
 import com.example.gestion_achat3.entity.achat.Product;
 import com.example.gestion_achat3.entity.achat.Purchase;
+import com.example.gestion_achat3.entity.fournisseur.Supplier;
 import com.example.gestion_achat3.model.PurchaseMetier;
 import com.example.gestion_achat3.repository.*;
 import com.example.gestion_achat3.service.ConnexionBase;
@@ -10,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -74,8 +76,20 @@ public class PurchaseController {
     @GetMapping("purchase/list_valid")
     public String list_avec_proforma(Model model)
     {
+        /*ConnexionBase connexionBase=new ConnexionBase(orderRepository,orderDetailsRepository,userRepository,productRepository,purchaseRepository,requestRepository,request_typeRepository,serviceRepository,supplierRepository,proformaRepository,proformaDetailsRepository);
+        List<Purchase> purchaseList=Purchase.get_purchase_with_3_proforma(connexionBase);
+        model.addAttribute("purchaseList",purchaseList);
+        return "purchase/list_valid";*/
+
         ConnexionBase connexionBase=new ConnexionBase(orderRepository,orderDetailsRepository,userRepository,productRepository,purchaseRepository,requestRepository,request_typeRepository,serviceRepository,supplierRepository,proformaRepository,proformaDetailsRepository);
         List<Purchase> purchaseList=Purchase.get_purchase_with_3_proforma(connexionBase);
+        List<Supplier> supplier_list=new ArrayList<>();
+        for (Purchase purchase:purchaseList)
+        {
+            Supplier temp=purchase.get_moins_disants(connexionBase).get(0);
+            supplier_list.add(temp);
+        }
+        model.addAttribute("supplierList",supplier_list);
         model.addAttribute("purchaseList",purchaseList);
         return "purchase/list_valid";
     }
